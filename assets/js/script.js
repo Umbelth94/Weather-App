@@ -5,6 +5,7 @@ var currentDate = dayjs().format('MM/DD/YYYY');
 var searchButton = document.querySelector('#search-btn');
 var cityInput = document.querySelector('#city-input')
 var savedCitiesContainer = document.querySelector('#saved-cities')
+var currentWeatherContainer = document.querySelector('#current-weather-container')
 
 var latitude;
 var longitude;
@@ -62,7 +63,7 @@ function getCoords(cityName) {
 function getWeather(cityName) {
     getCoords(cityName)
         .then(({ latitude, longitude }) => {
-            fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=bf70693fc02342902eb9d0f51befef5a`)
+            fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=bf70693fc02342902eb9d0f51befef5a&units=imperial`)
                 .then(response => response.json())
                 .then(data => {
                     const currentUnixTimestamp = dayjs().unix();
@@ -79,7 +80,8 @@ function getWeather(cityName) {
                         }
                     }
                         if (closestIndex !== -1){
-                            console.log('Closest weather data:', data.list[closestIndex]);
+                            displayMainCard(cityName, data.list[closestIndex]);
+            
                         } else {
                             console.log('no matching weather data found.');
                         }
@@ -95,5 +97,31 @@ function getWeather(cityName) {
         });
 }
 
+function displayMainCard(cityName, data){
+    var weatherCondition = data.weather[0].icon;
+    const iconImg = document.createElement('img');
+    iconImg.src = 'https://openweathermap.org/img/wn/' + weatherCondition + '@2x.png';
 
+    const cityTitle = document.createElement('h3');
+    cityTitle.textContent = cityName + ' (' + currentDate + ')';
+    cityTitle.appendChild(iconImg);
+
+    const temperature = document.createElement('p');
+    temperature.textContent = 'Temperature: ' + data.main.temp +' °F';
+    const wind = document.createElement('p');
+    wind.textContent = 'Wind: ' + data.wind.speed + ' MPH' 
+    const humidity = document.createElement('p');
+    humidity.textContent = 'Humidity: ' + data.main.humidity + ' %';
+
+    currentWeatherContainer.innerHTML = '';  // Clear previous content
+    currentWeatherContainer.classList.replace('d-none','d-block');
+    currentWeatherContainer.appendChild(cityTitle);
+    currentWeatherContainer.appendChild(temperature);
+    currentWeatherContainer.appendChild(wind);
+    currentWeatherContainer.appendChild(humidity);
+
+
+    console.log('Closest weather data:', data);
+   
+}
 displayCities();

@@ -10,3 +10,12 @@ body{
     padding-bottom:2rem;
     border-bottom:1px solid black;
 }
+
+#current-weather-container{
+    border:solid black 1px;
+    padding:.5rem;
+}
+
+#current-weather-container > h3 {
+    margin-top:-20px;
+}
