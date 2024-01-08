@@ -12,10 +12,24 @@ body{
 }
 
 #current-weather-container{
-    border:solid black 1px;
+    border:solid rgb(201, 198, 198) 1px;
     padding:.5rem;
+    border-radius:5px;
+    margin-bottom:1rem;
 }
 
 #current-weather-container > h3 {
     margin-top:-20px;
+}
+
+.card{
+    color:#FFFF;
+    background-color:#6C757D;
+    width:15%
+}
+
+@media only screen and (max-width: 1000px) {
+    .card{
+        width:100%;
+    }
 }

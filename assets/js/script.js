@@ -36,7 +36,6 @@ function displayCities(){
         var cityBtn = document.createElement('button');
         cityBtn.addEventListener('click', function(){
             getWeather(cityData[i]);
-            console.log('This is where the' +cityData[i] + 'function goes');
         });
         cityBtn.textContent=cityData[i];
         cityBtn.setAttribute('class', 'btn btn-secondary mt-2');
@@ -81,6 +80,7 @@ function getWeather(cityName) {
                     }
                         if (closestIndex !== -1){
                             displayMainCard(cityName, data.list[closestIndex]);
+                            displaySmallCards(data);
             
                         } else {
                             console.log('no matching weather data found.');
@@ -123,5 +123,57 @@ function displayMainCard(cityName, data){
 
     console.log('Closest weather data:', data);
    
+}
+
+function displaySmallCards(data) {
+    const smallCardsContainer = document.querySelector('#future-weather-container');
+    smallCardsContainer.innerHTML = '';  // Clear previous content
+    const header = document.createElement('h3');
+    header.textContent = '5 Day Weather Forecast';
+    smallCardsContainer.appendChild(header)
+
+    for (let i = 0; i < data.list.length; i += 8) {
+        const dayData = data.list[i];
+        if (!dayData) {
+            continue;  // Skip incomplete data
+        }
+
+        const card = document.createElement('div');
+        card.classList.add('card', 'm-2');
+
+        const cardBody = document.createElement('div');
+        cardBody.classList.add('card-body');
+
+        const dayTitle = document.createElement('h5');
+        dayTitle.classList.add('card-title');
+        dayTitle.textContent = dayjs(dayData.dt * 1000).format('ddd, MMM D');
+
+        const iconImg = document.createElement('img');
+        const weatherCondition = dayData.weather[0].icon;
+        iconImg.src = 'https://openweathermap.org/img/wn/' + weatherCondition + '@2x.png';
+
+        const temperature = document.createElement('p');
+        temperature.classList.add('card-text');
+        temperature.textContent = 'Temp: ' + dayData.main.temp + ' °F';
+
+        const wind = document.createElement('p');
+        wind.classList.add('card-text');
+        wind.textContent = 'Wind: ' + dayData.wind.speed + ' MPH';
+
+        const humidity = document.createElement('p');
+        humidity.classList.add('card-text');
+        humidity.textContent = 'Humidity: ' + dayData.main.humidity + ' %';
+
+        const header = document.createElement('h3');
+        header.textContent = '5 Day Weather Forecast';
+        cardBody.appendChild(dayTitle);
+        cardBody.appendChild(iconImg);
+        cardBody.appendChild(temperature);
+        cardBody.appendChild(wind);
+        cardBody.appendChild(humidity);
+
+        card.appendChild(cardBody);
+        smallCardsContainer.appendChild(card);
+    }
 }
 displayCities();
