@@ -23,11 +23,15 @@ function saveCity(){
     if (inputData === ''){
         return;
     }
-    cityData.push(inputData);
-    localStorage.setItem('cityData',JSON.stringify(cityData));
-    displayCities();
-    getWeather(inputData);
-    cityInput.value='';
+    if (!cityData.includes(inputData)) {
+        cityData.push(inputData);
+        localStorage.setItem('cityData', JSON.stringify(cityData));
+        displayCities();
+        getWeather(inputData);
+        cityInput.value='';
+    } else {
+        console.log('City already exists in the list.');
+    }
 }
 
 function displayCities(){
@@ -65,28 +69,35 @@ function getWeather(cityName) {
             fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=bf70693fc02342902eb9d0f51befef5a&units=imperial`)
                 .then(response => response.json())
                 .then(data => {
-                    const currentUnixTimestamp = dayjs().unix();
-                    console.log('current unix hour ' + currentUnixTimestamp);
+                    if (data && data.list && data.list.length > 0){
+
                     
-                    //Loop through all of the indexes to get the current hour's forecast
-                    let closestTimestamp = Infinity;
-                    let closestIndex = -1;
-                    for (i = 0; i < data.list.length; i++){
-                        const timestampDifference = Math.abs(data.list[i].dt - currentUnixTimestamp)
-                        if (timestampDifference < closestTimestamp) {
-                            closestTimestamp = timestampDifference;
-                            closestIndex = i;
+                        const currentUnixTimestamp = dayjs().unix();
+                        console.log('current unix hour ' + currentUnixTimestamp);
+                        
+                        //Loop through all of the indexes to get the current hour's forecast
+                        let closestTimestamp = Infinity;
+                        let closestIndex = -1;
+                        for (i = 0; i < data.list.length; i++){
+                            const timestampDifference = Math.abs(data.list[i].dt - currentUnixTimestamp)
+                            if (timestampDifference < closestTimestamp) {
+                                closestTimestamp = timestampDifference;
+                                closestIndex = i;
+                            }
                         }
+                            if (closestIndex !== -1){
+                                displayMainCard(cityName, data.list[closestIndex]);
+                                displaySmallCards(data);
+                
+                            } else {
+                                console.log('no matching weather data found.');
+                            }
+                        
+                        console.log(data);
+                    } else {
+                        cityInput.value = '';
+                        window.alert('That city is either misspelled, or does not exist');
                     }
-                        if (closestIndex !== -1){
-                            displayMainCard(cityName, data.list[closestIndex]);
-                            displaySmallCards(data);
-            
-                        } else {
-                            console.log('no matching weather data found.');
-                        }
-                    
-                    console.log(data);
                 })
                 .catch(error => {
                     console.error('Error getting weather data:', error);
