@@ -1,6 +1,3 @@
-//To Do:
-    //Tap into the API to actually populate the weather data
-
 var currentDate = dayjs().format('MM/DD/YYYY');
 var searchButton = document.querySelector('#search-btn');
 var cityInput = document.querySelector('#city-input')
@@ -18,6 +15,7 @@ searchButton.addEventListener('click',function(){
     
 });
 
+//Save city locally
 function saveCity(){
     var inputData = cityInput.value;
     if (inputData === ''){
@@ -34,6 +32,7 @@ function saveCity(){
     }
 }
 
+//Display the cities on the side of the page
 function displayCities(){
     savedCitiesContainer.innerHTML = '';
     for (let i = 0; i < cityData.length; i++){
@@ -48,6 +47,7 @@ function displayCities(){
     }
 }
 
+//Call the geolocation API to grab coordinates of the city input
 function getCoords(cityName) {
     return fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&appid=bf70693fc02342902eb9d0f51befef5a')
         .then(response => response.json())
@@ -63,6 +63,7 @@ function getCoords(cityName) {
         });
 }
 
+//Call the weather API for the latitude and longitude of the entered city
 function getWeather(cityName) {
     getCoords(cityName)
         .then(({ latitude, longitude }) => {
@@ -107,6 +108,7 @@ function getWeather(cityName) {
             console.error('Error getting coordinates:', error);
         });
 }
+
 
 function displayMainCard(cityName, data){
     var weatherCondition = data.weather[0].icon;
@@ -187,4 +189,6 @@ function displaySmallCards(data) {
         smallCardsContainer.appendChild(card);
     }
 }
+
+//Initialize the saved cities on page load
 displayCities();
