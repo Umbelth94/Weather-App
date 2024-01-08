@@ -2,6 +2,9 @@
 
 
 ## Description
+
+Live Link: https://umbelth94.github.io/Weather-App/
+
 A simple weather app that provides a 5 day weather forecast for your desired city.  The cities are saved locally so that you can click on them for convenience instead of having the user type in their favorite cities every time.  This project was built to gain experience using 3rd-party web API's.  I utilized the OpenWeatherMap API and dayjs in the javascript in order to retrieve the weather data, and I used bootstrap for the webpage layout.  It was my first time using all of these API's but this project has made me realize just how powerful these tools are.  
 
 ## Usage
