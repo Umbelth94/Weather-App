@@ -49,7 +49,7 @@ function displayCities(){
 
 //Call the geolocation API to grab coordinates of the city input
 function getCoords(cityName) {
-    return fetch('http://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&appid=bf70693fc02342902eb9d0f51befef5a')
+    return fetch('https://api.openweathermap.org/geo/1.0/direct?q=' + cityName + '&appid=bf70693fc02342902eb9d0f51befef5a')
         .then(response => response.json())
         .then(data => {
             latitude = Math.round(data[0]?.lat * 100) / 100;
