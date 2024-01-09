@@ -67,7 +67,7 @@ function getCoords(cityName) {
 function getWeather(cityName) {
     getCoords(cityName)
         .then(({ latitude, longitude }) => {
-            fetch(`http://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=bf70693fc02342902eb9d0f51befef5a&units=imperial`)
+            fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=bf70693fc02342902eb9d0f51befef5a&units=imperial`)
                 .then(response => response.json())
                 .then(data => {
                     if (data && data.list && data.list.length > 0){
